@@ -20,9 +20,9 @@ PwmOut d_rev(PA_9);
 
 //デジタル出力するピンを初期化する
 //can_read→CAN.read()の真偽値を反映するインジケータ
-DigitalOut can_read(PB_6);
+DigitalOut can_read_LED(PB_6);
 //sig_receive→msg.id=(自分のID)の真偽値を反映するインジケータ
-DigitalOut sig_receive(PB_7);
+DigitalOut sig_receive_LED(PB_7);
 
 //デジタル入力するピンを初期化する
 //ロータリスイッチの入力ピン
@@ -101,5 +101,17 @@ int main(){
     c_rev = out_data[5];
     d_fwd = out_data[6];
     d_rev = out_data[7];
+
+    if(can.read(msg) && msg.id==CANID){
+      sig_receive_LED = 1;
+      can_read_LED = 0;
+    } else if(can.read(msg) && msg.id!=CANID){
+      sig_receive_LED = 0;
+      can_read_LED = 1;
+    } else {
+      sig_receive_LED = 0;
+      can_read_LED = 0;
+    }
+
   }
 }
