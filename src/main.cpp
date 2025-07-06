@@ -35,6 +35,8 @@ DigitalIn sw(PA_5);
 //変数・配列の初期設定
 //メインマイコンから送られてきた送信前のデータを復元し、代入する配列
 int16_t in_data[4] = {0, 0, 0, 0};
+//処理途中のデータを保持する配列
+float process_data[4] = {0, 0, 0, 0};
 //PWM出力のduty比を代入する配列
 float out_data[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
@@ -47,9 +49,9 @@ int main(){
 
   while(1){
     //タイムアウトの設定
-    auto no = HighResClock::now();
+    auto now = HighResClock::now();
     static auto last = now;
-    
+
     //CANの読み取り
     if(can.read(msg) && msg.id == CANID){
       for(int i = 0; i<4; i++){
@@ -59,6 +61,25 @@ int main(){
     } else {
       for(int i=0; i<4; i++){
         in_data[i] = 0;
+      }
+    }
+
+    //変数の処理
+    //int_16tからfloat型に変換(正負の浮動小数点)
+    for(int i=0; i<4; i++){
+      process_data[i] = float(in_data[i] / 32767);
+    }
+    //出力するデータに変換
+    for(int i=0; i<4; i++){
+      if(process_data[i] > 0){
+        out_data[2*i] = abs(process_data[i]);
+        out_data[2*i+1] = 0;
+      }else if(process_data[i] < 0){
+        out_data[2*i] = 0;
+        out_data[2*i+1] = abs(process_data[i]);
+      }else{
+        out_data[2*i] = 0;
+        out_data[2*i+1] = 0;
       }
     }
 
