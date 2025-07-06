@@ -47,7 +47,7 @@ int main(){
 
   while(1){
     //タイムアウトの設定
-    auto no = HighResClock::();
+    auto no = HighResClock::now();
     static auto last = now;
     
     //CANの読み取り
