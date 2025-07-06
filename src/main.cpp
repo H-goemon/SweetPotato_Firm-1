@@ -18,7 +18,8 @@ PwmOut d_fwd(PA_10);
 PwmOut d_rev(PA_9);
 
 //デジタル出力するピンを初期化する
-
+DigitalOut can_read(PB_6);
+DigitalOut sig_receive(PB_7);
 
 //デジタル入力するピンを初期化する
 //ロータリースイッチの入力ピン
