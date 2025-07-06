@@ -25,7 +25,7 @@ DigitalOut can_read(PB_6);
 DigitalOut sig_receive(PB_7);
 
 //デジタル入力するピンを初期化する
-//ロータリースイッチの入力ピン
+//ロータリスイッチの入力ピン
 DigitalIn idset_1(PA_0);
 DigitalIn idset_2(PB_0);
 DigitalIn idset_4(PB_1);
@@ -39,13 +39,30 @@ int16_t in_data[4] = {0, 0, 0, 0};
 float out_data[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
 int main(){
+  //ロータリスイッチを読み取り、CANIDとして保持
   const int CANID = 1*!idset_1 + 2*!idset_2 + 4*!idset_4;
+
+  //タイムアウト時間
+  constexpr auto timeout = 50ms;
+
   while(1){
+    //タイムアウトの設定
+    auto no = HighResClock::();
+    static auto last = now;
+    
+    //CANの読み取り
     if(can.read(msg) && msg.id == CANID){
       for(int i = 0; i<4; i++){
-
+        in_data[i] = msg.data[2*i+1] << 8| msg.data[2*i];
+      }
+      last = now;
+    } else {
+      for(int i=0; i<4; i++){
+        in_data[i] = 0;
       }
     }
+
+    //PWM出力をする
     a_fwd = out_data[0];
     a_rev = out_data[1];
     b_fwd = out_data[2];
