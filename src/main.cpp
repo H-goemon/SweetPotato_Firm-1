@@ -43,7 +43,7 @@ float out_data[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 int main(){
   //ロータリスイッチを読み取り、CANIDとして保持(起動時のデータを記録し、変更しない)
   const int CANID = 1*!idset_1 + 2*!idset_2 + 4*!idset_4;
-  printf("CANID = %d",CANID);
+  printf("CANID = %d\n",CANID);
 
   //タイムアウト時間
   constexpr auto timeout = 50ms;
@@ -66,14 +66,14 @@ int main(){
     }
 
     for(int i=0; i<4; i++){
-      printf("in_data%d=%d",i, in_data[i]);
+      printf("in_data%d=%d\n",i, in_data[i]);
     }
 
     //変数の処理
     //int_16tからfloat型に変換(正負の浮動小数点)
     for(int i=0; i<4; i++){
-      process_data[i] = float(in_data[i] / 32767);
-      printf("process_data%d=%f", i, process_data[i]);
+      process_data[i] = float(in_data[i] / 32767.0);
+      printf("process_data%d=%f\n", i, process_data[i]);
     }
     //出力するデータに変換
     for(int i=0; i<4; i++){
@@ -89,7 +89,7 @@ int main(){
       }
     }
     for(int i=0; i<8; i++){
-      printf("out_data%d=%f", i, out_data[i]);
+      printf("out_data%d=%f\n", i, out_data[i]);
     }
 
     //PWM出力をする
