@@ -78,11 +78,11 @@ int main(){
     //出力するデータに変換
     for(int i=0; i<4; i++){
       if(process_data[i] > 0){
-        out_data[2*i] = abs(process_data[i]);
+        out_data[2*i] = process_data[i];
         out_data[2*i+1] = 0;
       }else if(process_data[i] < 0){
         out_data[2*i] = 0;
-        out_data[2*i+1] = abs(process_data[i]);
+        out_data[2*i+1] = -1*process_data[i];
       }else{
         out_data[2*i] = 0;
         out_data[2*i+1] = 0;
