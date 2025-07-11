@@ -13,8 +13,8 @@ PwmOut a_fwd(PA_1);
 PwmOut a_rev(PA_3);
 PwmOut b_fwd(PA_4);
 PwmOut b_rev(PA_6);
-PwmOut c_fwd(PA_8);
-PwmOut c_rev(PA_7);
+PwmOut c_fwd(PB_0);
+PwmOut c_rev(PB_1);
 PwmOut d_fwd(PA_10);
 PwmOut d_rev(PA_9);
 
