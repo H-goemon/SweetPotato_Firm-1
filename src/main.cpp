@@ -13,8 +13,8 @@ PwmOut a_fwd(PA_1);
 PwmOut a_rev(PA_3);
 PwmOut b_fwd(PA_4);
 PwmOut b_rev(PA_6);
-PwmOut c_fwd(PA_8);
-PwmOut c_rev(PA_7);
+PwmOut c_fwd(PB_0);
+PwmOut c_rev(PB_1);
 PwmOut d_fwd(PA_10);
 PwmOut d_rev(PA_9);
 
@@ -24,11 +24,11 @@ DigitalOut can_read_LED(PB_6);
 //sig_receive→msg.id=(自分のID)の真偽値を反映するインジケータ
 DigitalOut sig_receive_LED(PB_7);
 
-//デジタル入力するピンを初期化する
-//ロータリスイッチの入力ピン
-DigitalIn idset_1(PA_0);
-DigitalIn idset_2(PB_0);
-DigitalIn idset_4(PB_1);
+// //デジタル入力するピンを初期化する
+// //ロータリスイッチの入力ピン
+// DigitalIn idset_1(PA_0);
+// DigitalIn idset_2(PB_0);
+// DigitalIn idset_4(PB_1);
 //ユーザSWの入力ピン
 DigitalIn sw(PA_5);
 
@@ -42,7 +42,8 @@ float out_data[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 
 int main(){
   //ロータリスイッチを読み取り、CANIDとして保持(起動時のデータを記録し、変更しない)
-  const int CANID = 1*!idset_1 + 2*!idset_2 + 4*!idset_4;
+  // const int CANID = 1*!idset_1 + 2*!idset_2 + 4*!idset_4;
+  const int CANID = 10;
   printf("CANID = %d\n",CANID);
 
   //タイムアウト時間
@@ -53,17 +54,22 @@ int main(){
     auto now = HighResClock::now();
     static auto last = now;
 
-    //CANの読み取り
-    if(can.read(msg) && msg.id == CANID){
-      for(int i = 0; i<4; i++){
-        in_data[i] = msg.data[2*i+1] << 8| msg.data[2*i];
-      }
-      last = now;
-    } else {
-      for(int i=0; i<4; i++){
-        in_data[i] = 0;
-      }
-    }
+    // //CANの読み取り
+    // if(can.read(msg) && msg.id == CANID){
+    //   for(int i = 0; i<4; i++){
+    //     in_data[i] = msg.data[2*i+1] << 8| msg.data[2*i];
+    //   }
+    //   last = now;
+    // } else {
+    //   for(int i=0; i<4; i++){
+    //     in_data[i] = 0;
+    //   }
+    // }
+
+    in_data[0] = -1000;
+    in_data[1] = -2000;
+    in_data[2] = -3000;
+    in_data[3] = -4000;
 
     for(int i=0; i<4; i++){
       printf("in_data%d=%d\n",i, in_data[i]);
@@ -102,16 +108,16 @@ int main(){
     d_fwd = out_data[6];
     d_rev = out_data[7];
 
-    if(can.read(msg) && msg.id==CANID){
-      sig_receive_LED = 1;
-      can_read_LED = 0;
-    } else if(can.read(msg) && msg.id!=CANID){
-      sig_receive_LED = 0;
-      can_read_LED = 1;
-    } else {
-      sig_receive_LED = 0;
-      can_read_LED = 0;
-    }
+    // if(can.read(msg) && msg.id==CANID){
+    //   sig_receive_LED = 1;
+    //   can_read_LED = 0;
+    // } else if(can.read(msg) && msg.id!=CANID){
+    //   sig_receive_LED = 0;
+    //   can_read_LED = 1;
+    // } else {
+    //   sig_receive_LED = 0;
+    //   can_read_LED = 0;
+    // }
 
   }
 }
